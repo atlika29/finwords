@@ -1,0 +1,551 @@
+<!doctype html><html><head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style type="text/css">
+
+.table { width:400px; }
+.cell { display:inline-block; height:40px; width:40px; line-height:40px; text-align:center; margin:0 10px 10px 0; background:#ccc; cursor:pointer; }
+
+.cell.color-1 { background:#339; color:#fff; }
+.cell.color-2 { background:#393; }
+.cell.color-3 { background:#399; }
+.cell.color-4 { background:#933; }
+.cell.color-5 { background:#939; }
+.cell.color-6 { background:#993; }
+.cell.color-7 { background:#39c; }
+.cell.color-8 { background:#3c9; }
+.cell.color-9 { background:#93c; }
+.cell.color-10 { background:#9c3; }
+.cell.color-11 { background:#c39; }
+.cell.color-12 { background:#c93; }
+.cell.color-13 { background:#39f; }
+.cell.color-14 { background:#3f9; }
+.cell.color-15 { background:#93f; }
+.cell.color-16 { background:#9f3; }
+.cell.color-17 { background:#f39; }
+.cell.color-18 { background:#f93; }
+.cell.color-19 { background:#ccf; }
+.cell.color-20 { background:#cfc; }
+.cell.color-21 { background:#cff; }
+.cell.color-22 { background:#fcc; }
+.cell.color-23 { background:#fcf; }
+.cell.color-24 { background:#ffc; }
+.cell.color-25 { background:#33c; color:#fff; }
+.cell.color-26 { background:#3c3; }
+.cell.color-27 { background:#3cc; }
+.cell.color-28 { background:#c33; }
+.cell.color-29 { background:#c3c; }
+.cell.color-30 { background:#cc3; }
+.cell.color-31 { background:#3cf; }
+.cell.color-32 { background:#3fc; }
+.cell.color-33 { background:#c3f; }
+.cell.color-34 { background:#cf3; }
+.cell.color-35 { background:#f3c; }
+.cell.color-36 { background:#fc3; }
+.cell.color-37 { background:#99f; }
+.cell.color-38 { background:#9f9; }
+.cell.color-39 { background:#9ff; }
+.cell.color-40 { background:#f99; }
+.cell.color-41 { background:#f9f; }
+.cell.color-42 { background:#ff9; }
+.cell.color-43 { background:#33f; color:#fff; }
+.cell.color-44 { background:#3f3; }
+.cell.color-45 { background:#3ff; }
+.cell.color-46 { background:#f33; }
+.cell.color-47 { background:#f3f; }
+.cell.color-48 { background:#ff3; }
+.cell.color-49 { background:#99c; }
+.cell.color-50 { background:#9c9; }
+.cell.color-51 { background:#9cc; }
+.cell.color-52 { background:#c99; }
+.cell.color-53 { background:#c9c; }
+.cell.color-54 { background:#cc9; }
+.cell.color-55 { background:#9cf; }
+.cell.color-56 { background:#9fc; }
+.cell.color-57 { background:#c9f; }
+.cell.color-58 { background:#cf9; }
+.cell.color-59 { background:#f9c; }
+.cell.color-60 { background:#fc9; }
+
+/*
+112 123
+121
+122
+211
+212
+221
+123
+132
+213
+231
+312
+321
+
+124 124
+142
+214
+241
+412
+421
+
+334 34
+343
+344
+433
+434
+443
+
+113 134
+131
+133
+311
+313
+331
+134
+143
+314
+341
+413
+431
+
+224 24
+242
+244
+422
+424
+442
+
+114 14
+141
+144
+411
+414
+441
+
+223 234
+232
+233
+322
+323
+332
+234
+243
+324
+342
+423
+432
+*/
+
+.info { margin-top:10px; padding:10px 0; border-top:1px solid #ccc; }
+.info::first-child { margin-top:0; }
+.info-title { font-weight:bold; font-size:125%; }
+.info-details { margin:5px 0; }
+.info-link { color:#999; text-decoration:underline; }
+.info-link:hover { text-decoration:none; }
+
+</style>
+
+</head><body>
+
+<!--
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+-->
+
+<div class="table">
+	<span class="cell" id="cell" style="display:none"></span>
+</div>
+<div class="infos">
+	<div class="info" id="info" style="display:none">
+		<div class="info-title"></div>
+		<div class="info-details"></div>
+		<a class="info-link" target="_blank" href="javascript:undefined"></a>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+var html = {};
+
+(function(){
+
+html.id = function (id) { return document.getElementById(id); };
+
+html.class = function (e, n, o) {
+	var eo = ' '+e.className+' ', en = eo;
+	if ('' != o && -1 != en.indexOf(' '+o+' ')) en = en.replace(' '+o+' ', ' ');
+	if ('' != n && -1 == en.indexOf(' '+n+' ')) en = en+n+' ';
+	if (en == eo) return;
+	
+	e.className = en.replace(/^ /, '').replace(/ $/, '');
+};
+
+html.toggle = function (e, c) {
+	var ec = ' '+e.className+' ', ret = -1 == ec.indexOf(' '+c+' ');
+	if (ret) ec = ec+c+' ';
+	else ec = ec.replace(' '+c+' ', ' ');
+	
+	e.className = ec.replace(/^ /, '').replace(/ $/, '');
+	return ret;
+};
+
+html.has = function (e, c) { return -1 != (' '+e.className+' ').indexOf(' '+c+' '); };
+
+html.data = function (e, k, v) {
+	if ('undefined' == typeof v) {
+		v = e.getAttribute(k);
+		return null == v ? null : JSON.parse(v);
+	}
+	else if (null == v)
+		e.removeAttribute(k);
+	else
+		e.setAttribute(k, JSON.stringify(v));
+};
+
+// anti-xss variant of `e.innerHTML = text`
+html.text = function (e, text) {
+	e.innerHTML = '';
+	e.appendChild(document.createTextNode(text));
+};
+
+})();
+
+</script>
+<script type="text/javascript">
+
+var
+	$ = html.id,
+	$class = html.class,
+	$toggle = html.toggle,
+	$has = html.has,
+	$data = html.data,
+	$text = html.text;
+
+var SquareSource = [
+	"Д> Е> П> О> З> И> Т! С_",
+	"Д> О> Х> О_ Л_ Б< О< Т_",
+	"К_ И> Т_ Д! И_ Т_ А< Р<",
+	"А> П^ А> Л! Г_ Е> Г> И_",
+	"Л> У> К> О_ А_ П_ И_ Я!",
+	"Е_ М< Л! Й< Ц_ И_ Н_ Б_",
+	"Ч> Е> Л! Я! И< Ф! Д_ К_",
+	"Р> И> С> К! С! К< Е< С!" ];
+var SquareInfos = [
+	{ key: "ДЕПОЗИТ",
+		title: "Депозит 18% — разумный выбор для роста капитала",
+		details: "Надёжность и высокая ставка — откройте депозит в БКС Банке под 18% годовых и создайте прочную основу для будущих инвестиций.",
+		link: [ "Оформить онлайн", "https://bcs.ru/friends/accept-invitation?promo=buydir920" ] },
+	{ key: "СТРАТЕГИЯ",
+		title: "Инвестиционная стратегия на II квартал 2025",
+		details: "Какие драйверы будут определять рынок? Аналитики БКС делятся комплексным взглядом на российскую экономику, ключевые сектора и отдельные акции.",
+		link: [ "Читать стратегию", "https://bcs.ru/friends/accept-invitation?promo=buydir920" ] },
+	{ key: "ДОХОД",
+		title: "Доход 22% — без активных действий",
+		details: "Накопительный счёт от БКС Банка: 22% годовых, полная ликвидность, надёжная ставка. Удобно управлять — легко планировать.",
+		link: [ "Открыть счёт", "https://bcs.ru/friends/accept-invitation?promo=buydir920" ] },
+	{ key: "БКС",
+		title: "30 лет БКС — вместе с вами",
+		details: "БКС отмечает юбилей. Нам 30 — и мы благодарим клиентов за доверие. Примите участие в розыгрыше сертификата на путешествие.",
+		link: [ "Присоединиться", "https://bcs.ru/friends/accept-invitation?promo=buydir920" ] },
+	{ key: "РИСК",
+		title: "Риск-профиль — инструмент для взвешенных решений",
+		details: "Инвестиции всегда индивидуальны. Определите свой риск-профиль и выберите стратегии, соответствующие вашим целям и уровню комфорта.",
+		link: [ "Пройти онлайн-тест", "https://bcs.ru/friends/accept-invitation?promo=buydir920" ] },
+	{ key: "ОБЛИГАЦИЯ",
+		title: "Облигации: идеи, анализ, перспективы",
+		details: "Актуальные рыночные обзоры, технический анализ и подборки облигаций от команды БКС Экспресс.",
+		link: [ "Открыть раздел", "https://bcs.ru/friends/accept-invitation?promo=buydir920" ] },
+	{ key: "КАПИТАЛ",
+		title: "Капитал начинается с первого шага",
+		details: "Откройте счёт в БКС — сформируйте фундамент для личных инвестиций и грамотного финансового планирования.",
+		link: [ "Начать инвестировать", "https://bcs.ru/friends/accept-invitation?promo=buydir920" ] },
+	{ key: "ПИФ",
+		title: "ПИФ дня — БКС Денежный рынок",
+		details: "Инструмент для тех, кто ценит стабильность: ПИФ \"БКС Денежный рынок\" — короткие сроки, высокая ликвидность, профессиональное управление.",
+		link: [ "Узнать подробнее", "https://bcs.ru/friends/accept-invitation?promo=buydir920" ] },
+	{ key: "ИНДЕКС",
+		title: "Индекс МосБиржи — анализ текущих тенденций",
+		details: "Что влияет на динамику? Комментарии аналитиков БКС по основным факторам давления на рынок и сценариям развития.",
+		link: [ "Читать обзор", "https://bcs.ru/friends/accept-invitation?promo=buydir920" ] },
+	{ key: "МЕЧЕЛ",
+		title: "Мечел — ключевые уровни и поведение бумаги",
+		details: "Технический взгляд на одну из самых волатильных акций. Следите за котировками и сигналами.",
+		link: [ "График акции", "https://bcs.ru/friends/accept-invitation?promo=buydir920" ] },
+	{ key: "ЛУКОЙЛ",
+		title: "Лукойл — в центре внимания инвесторов",
+		details: "Актуальная аналитика, графики и идеи по флагману нефтяного сектора.",
+		link: [ "Котировки и обзор", "https://bcs.ru/friends/accept-invitation?promo=buydir920" ] } ];
+
+var
+	color = 1,
+	square = [],
+	path = [],
+	cellpathEnd, cellpathCleanable,
+	mouseIsDown = false;
+
+function posNew (y, x) { return [ y, x ]; }
+function posEq (a, b) { return a[0] == b[0] && a[1] == b[1]; }
+
+function squareAt (pos) { return square[pos[0]][pos[1]]; }
+
+// cellpath
+
+function cellpathContinues (pos) {
+	if (!path.length) return true;
+	
+	var p = path[path.length-1];
+	return (
+		pos[0] == p[0] &&
+			(pos[1] == p[1]+1 || pos[1] == p[1]-1) ||
+		pos[1] == p[1] &&
+			(pos[0] == p[0]+1 || pos[0] == p[0]-1));
+}
+
+function cellpathAdd (node, pos, s) {
+	$class(node, 'color-'+color, '');
+	s.color = color;
+	path.push(pos);
+}
+
+function cellpathTryEnd () {
+	if (!path.length) return;
+	if ('undefined' != typeof squareAt(path[0]).prev) return;
+	
+	var s = squareAt(path[path.length-1]);
+	if ('undefined' == typeof s.last) return;
+	
+	for (var i = path.length-1; i; i--) {
+		if ('undefined' == typeof s.prev) return;
+		if (!posEq(s.prev, path[i-1])) return;
+		
+		s = squareAt(s.prev);
+	}
+	
+	var key = '';
+	for (var i = 0; i != path.length; i++) key += squareAt(path[i]).text;
+	
+	var info = null;
+	for (var i = 0; i != SquareInfos.length; i++)
+		if (key == SquareInfos[i].key)
+			{ info = SquareInfos[i]; break; }
+	if (info) {
+		var
+			first = $('info'),
+			i = first.cloneNode(true);
+		i.removeAttribute('id');
+		i.style.display = '';
+		
+		i.getElementsByClassName('info-title')[0].innerHTML = info.title;
+		i.getElementsByClassName('info-details')[0].innerHTML = info.details;
+		
+		var iLink = i.getElementsByClassName('info-link')[0];
+		iLink.innerHTML = info.link[0];
+		iLink.href = info.link[1];
+		
+		first.parentNode.insertBefore(i, first.nextSibling);
+	}
+	
+	path = [];
+	color++;
+}
+
+function cellpathClearWhole (cleanColor) {
+	for (var i = 0; i != 8; i++)
+		for (var j = 0; j != 8; j++) {
+			var sq = square[i][j];
+			if (!(
+				'undefined' != typeof sq.color &&
+				cleanColor == sq.color
+			)) continue;
+			
+			$class(sq.node, '', 'color-'+sq.color);
+			delete sq.color;
+		}
+}
+
+function cellpathClearTail (pos, clearPos) {
+	var end;
+	for (end = 0; !posEq(pos, path[end]); end++) ;
+	if (!clearPos) end++;
+	
+	for (var j = end; j != path.length; j++) {
+		var sq = squareAt(path[j]);
+		$class(sq.node, '', 'color-'+sq.color);
+		delete sq.color;
+	}
+	
+	path.splice(end);
+}
+
+// drag
+
+function dragStart (node) {
+	var
+		pos = $data(node, 'pos'),
+		s = squareAt(pos);
+	
+	cellpathCleanable = 'undefined' != typeof s.color && color == s.color && path.length && posEq(pos, path[path.length-1]);
+	
+	if ('undefined' != typeof s.color && color == s.color)
+		cellpathClearTail(pos, false);
+	else {
+		if ('undefined' != typeof s.color)
+			cellpathClearWhole(s.color);
+		
+		if (!cellpathContinues(pos)) {
+			cellpathClearWhole(color);
+			path = [];
+		}
+		cellpathAdd(node, pos, s);
+	}
+	
+	cellpathEnd = pos;
+}
+
+function dragEnter (node) {
+	var
+		pos = $data(node, 'pos'),
+		s = squareAt(pos);
+	
+	if ('undefined' != typeof s.color && color == s.color)
+		cellpathClearTail(pos, false);
+	else {
+		if ('undefined' != typeof s.color)
+			return;
+		
+		if (!cellpathContinues(pos))
+			return;
+		
+		cellpathAdd(node, pos, s);
+	}
+	
+	if (!posEq(cellpathEnd, pos))
+		cellpathCleanable = false;
+	cellpathEnd = pos;
+}
+
+function dragFinish (node) {
+	if (cellpathCleanable) {
+		var pos = $data(node, 'pos');
+		if (null != pos && posEq(pos, path[path.length-1]))
+			cellpathClearTail(pos, true);
+	}
+	
+	cellpathTryEnd();
+}
+
+// events
+
+function cellMouseDown (e) {
+	dragStart(e.target);
+}
+
+function cellMouseEnter (e, skipMouseIsDownCheck) {
+	if (!mouseIsDown) return;
+	dragEnter(e.target);
+}
+
+function docMouseDown (e) {
+	e.preventDefault();
+	mouseIsDown = true;
+}
+
+function docMouseUp (e) {
+	mouseIsDown = false;
+	dragFinish(e.target);
+}
+
+/*
+	https://stackoverflow.com/questions/13655919/how-to-bind-both-mousedown-and-touchstart-but-not-respond-to-both-android-jqu
+	https://developer.mozilla.org/en-US/docs/Web/API/Touch_events#additional_tips
+	
+	Since calling preventDefault() on a touchstart or the first touchmove event
+	of a series prevents the corresponding mouse events from firing, it's common
+	to call preventDefault() on touchmove rather than touchstart. That way, mouse
+	events can still fire and things like links will continue to work. */
+function cellTouchStart (e) {
+	e.preventDefault();
+	dragStart(e.target);
+}
+
+function cellTouchEnd (e) {
+	dragFinish(e.target);
+}
+
+function cellTouchMove (e) {
+	e.preventDefault();
+	var t = e.touches[0];
+	
+	for (var i = 0; i != 8; i++)
+		for (var j = 0; j != 8; j++) {
+			var
+				n = square[i][j].node,
+				y = n.offsetTop/* + n.offsetParent.offsetTop*/,
+				x = n.offsetLeft/* + n.offsetParent.offsetLeft*/,
+				h = n.clientHeight, w = n.clientWidth;
+			if (!(
+				y <= t.pageY && t.pageY <= y+h &&
+				x <= t.pageX && t.pageX <= x+w
+			)) continue;
+			
+			dragEnter(n);
+			return;
+		}
+}
+
+// init
+
+for (var i = 0; i != 8; i++) {
+	square[i] = [];
+	for (var j = 0; j != 8; j++)
+		// text, prev, last, color, node
+		square[i][j] = { text:SquareSource[i][j*3] };
+}
+for (var i = 0; i != 8; i++)
+	for (var j = 0; j != 8; j++)
+		switch (SquareSource[i][j*3+1]) {
+		case '^': square[i-1][j].prev = [ i, j ]; break
+		case '>': square[i][j+1].prev = [ i, j ]; break
+		case '_': square[i+1][j].prev = [ i, j ]; break
+		case '<': square[i][j-1].prev = [ i, j ]; break
+		case '!': square[i][j].last = true; break;
+		}
+
+var cell = $('cell');
+
+for (var i = 0; i != 8; i++)
+	for (var j = 0; j != 8; j++) {
+		var s = square[i][j];
+		
+		var c = cell.cloneNode(true);
+		c.removeAttribute('id');
+		c.style.display = '';
+		$text(c, s.text);
+		$data(c, 'pos', posNew(i, j));
+		
+		c.addEventListener('mousedown', cellMouseDown);
+		c.addEventListener('mouseenter', cellMouseEnter);
+		
+		c.addEventListener('touchstart', cellTouchStart);
+		c.addEventListener('touchmove', cellTouchMove);
+		c.addEventListener('touchend', cellTouchEnd);
+		
+		s.node = c;
+		
+		cell.parentNode.appendChild(c);
+	}
+
+document.addEventListener('mousedown', docMouseDown);
+document.addEventListener('mouseup', docMouseUp);
+
+</script>
+
+<!--form method="post" action="" enctype="multipart/form-data"><textarea name="text"></textarea><input type="submit" /></form-->
+
+</body></html>
